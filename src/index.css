@@ -80,11 +80,11 @@
   }
 
   h1 {
-    @apply text-4xl font-bold tracking-tight;
+    @apply text-4xl font-bold tracking-tight leading-tight;
   }
 
   h2 {
-    @apply text-3xl font-semibold tracking-tight;
+    @apply text-3xl font-semibold tracking-tight leading-tight;
   }
 
   h3 {
@@ -131,5 +131,58 @@
   
   .badge-primary {
     @apply bg-primary/15 text-primary border-primary/30 transition-colors hover:bg-primary/20;
+  }
+  
+  /* Contract components styling */
+  .contract-card {
+    @apply bg-card border border-border shadow-sm rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md;
+  }
+  
+  .contract-header {
+    @apply p-5 border-b border-border flex items-center gap-4;
+  }
+  
+  .contract-body {
+    @apply p-5 space-y-4;
+  }
+  
+  .contract-footer {
+    @apply p-4 bg-muted/40 border-t border-border flex justify-between items-center;
+  }
+  
+  .contract-status {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .contract-status-active {
+    @apply bg-job-green-100 text-job-green-800 dark:bg-job-green-900/30 dark:text-job-green-400;
+  }
+  
+  .contract-status-pending {
+    @apply bg-job-blue-100 text-job-blue-800 dark:bg-job-blue-900/30 dark:text-job-blue-400;
+  }
+  
+  .contract-status-completed {
+    @apply bg-job-purple-100 text-job-purple-800 dark:bg-job-purple-900/30 dark:text-job-purple-400;
+  }
+  
+  .contract-status-cancelled {
+    @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400;
+  }
+  
+  .contract-detail-row {
+    @apply flex flex-col md:flex-row md:justify-between py-3 border-b border-border last:border-0;
+  }
+  
+  .contract-detail-label {
+    @apply text-muted-foreground font-medium mb-1 md:mb-0;
+  }
+  
+  .contract-detail-value {
+    @apply font-medium;
+  }
+  
+  .contract-action-button {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
   }
 }

@@ -35,15 +35,15 @@ const JobCard = ({
   return (
     <Card className="job-card">
       <CardContent className="p-0">
-        <div className="p-6">
+        <div className="p-5">
           <div className="flex items-start">
-            <div className="bg-secondary h-14 w-14 rounded flex items-center justify-center mr-4 flex-shrink-0">
+            <div className="bg-secondary h-14 w-14 rounded-md flex items-center justify-center mr-4 flex-shrink-0">
               <img src={logo} alt={company} className="h-8 w-8" />
             </div>
             <div className="flex-grow">
               <div className="flex justify-between">
-                <Link to={`/empleos/${id}`}>
-                  <h3 className="font-semibold text-lg mb-1 text-foreground hover:text-primary transition-colors">
+                <Link to={`/empleos/${id}`} className="group">
+                  <h3 className="font-semibold text-lg mb-1 text-foreground group-hover:text-primary transition-colors">
                     {title}
                   </h3>
                 </Link>
@@ -79,7 +79,7 @@ const JobCard = ({
               
               <div className="flex items-center justify-between">
                 <div className="flex gap-2">
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-xs border-muted-foreground/30 hover:bg-secondary/60">
                     {type}
                   </Badge>
                 </div>
@@ -89,10 +89,10 @@ const JobCard = ({
           </div>
         </div>
         <div className="job-card-footer">
-          <Button asChild variant="default" size="sm" className="bg-job-purple-600 hover:bg-job-purple-700">
+          <Button asChild variant="default" size="sm" className="bg-primary hover:bg-primary/90">
             <Link to={`/empleos/${id}`}>Ver Detalles</Link>
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="text-foreground/70 hover:text-foreground">
             <BookmarkPlus className="h-5 w-5" />
           </Button>
         </div>

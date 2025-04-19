@@ -56,30 +56,30 @@ const JobDetail = ({ job }: JobDetailProps) => {
   
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="bg-card rounded-lg shadow-sm p-6">
         <div className="flex flex-col md:flex-row md:items-center mb-6">
           <div className="mr-6 mb-4 md:mb-0">
-            <div className="bg-gray-100 h-20 w-20 rounded-md flex items-center justify-center">
+            <div className="bg-secondary h-20 w-20 rounded-md flex items-center justify-center">
               <img src={job.logo} alt={job.company} className="h-12 w-12" />
             </div>
           </div>
           <div>
             <h1 className="text-2xl font-bold mb-2">{job.title}</h1>
-            <div className="text-lg text-gray-700 font-medium mb-2">{job.company}</div>
+            <div className="text-lg text-foreground/90 font-medium mb-2">{job.company}</div>
             <div className="flex flex-wrap gap-3">
-              <div className="flex items-center text-gray-500 text-sm">
+              <div className="flex items-center text-muted-foreground text-sm">
                 <MapPin className="h-4 w-4 mr-1" />
                 {job.location}
               </div>
-              <div className="flex items-center text-gray-500 text-sm">
+              <div className="flex items-center text-muted-foreground text-sm">
                 <Briefcase className="h-4 w-4 mr-1" />
                 {job.type}
               </div>
-              <div className="flex items-center text-gray-500 text-sm">
+              <div className="flex items-center text-muted-foreground text-sm">
                 <Building className="h-4 w-4 mr-1" />
                 {job.category}
               </div>
-              <div className="flex items-center text-gray-500 text-sm">
+              <div className="flex items-center text-muted-foreground text-sm">
                 <Calendar className="h-4 w-4 mr-1" />
                 {job.postedDate}
               </div>
@@ -87,38 +87,38 @@ const JobDetail = ({ job }: JobDetailProps) => {
           </div>
         </div>
         
-        <div className="bg-blue-50 p-4 rounded-lg mb-6">
+        <div className="bg-primary/10 p-4 rounded-lg mb-6">
           <div className="font-semibold text-xl mb-1">Rango Salarial</div>
-          <div className="text-blue-700 font-bold text-2xl">{job.salary}</div>
+          <div className="text-primary font-bold text-2xl">{job.salary}</div>
         </div>
         
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">Resumen del Empleo</h2>
-          <p className="text-gray-700">{job.summary}</p>
+          <p className="text-foreground/90">{job.summary}</p>
         </section>
         
         <Separator className="my-6" />
         
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">Descripción del Empleo</h2>
-          <p className="text-gray-700 mb-6">{job.description}</p>
+          <p className="text-foreground/90 mb-6">{job.description}</p>
           
           <h3 className="text-lg font-bold mb-3">Responsabilidades</h3>
-          <ul className="list-disc pl-5 mb-6 text-gray-700 space-y-1">
+          <ul className="list-disc pl-5 mb-6 text-foreground/90 space-y-1">
             {job.responsibilities.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
           
           <h3 className="text-lg font-bold mb-3">Requisitos</h3>
-          <ul className="list-disc pl-5 mb-6 text-gray-700 space-y-1">
+          <ul className="list-disc pl-5 mb-6 text-foreground/90 space-y-1">
             {job.requirements.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
           
           <h3 className="text-lg font-bold mb-3">Beneficios</h3>
-          <ul className="list-disc pl-5 text-gray-700 space-y-1">
+          <ul className="list-disc pl-5 text-foreground/90 space-y-1">
             {job.benefits.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
@@ -130,15 +130,15 @@ const JobDetail = ({ job }: JobDetailProps) => {
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">Acerca de {job.company}</h2>
           <div className="flex items-start mb-4">
-            <div className="bg-gray-100 h-14 w-14 rounded-md flex items-center justify-center mr-4">
+            <div className="bg-secondary h-14 w-14 rounded-md flex items-center justify-center mr-4">
               <img src={job.logo} alt={job.company} className="h-8 w-8" />
             </div>
             <div>
               <h3 className="font-semibold text-lg">{job.company}</h3>
-              <p className="text-gray-600 text-sm">{job.companyType}</p>
+              <p className="text-muted-foreground text-sm">{job.companyType}</p>
             </div>
           </div>
-          <p className="text-gray-700 mb-4">{job.aboutCompany}</p>
+          <p className="text-foreground/90 mb-4">{job.aboutCompany}</p>
           <Button asChild variant="outline" size="sm">
             <Link to="#" className="flex items-center">
               Ver Perfil de Empresa
@@ -161,13 +161,13 @@ const JobDetail = ({ job }: JobDetailProps) => {
                   key={star}
                   type="button"
                   onClick={() => handleRate(star)}
-                  className="focus:outline-none"
+                  className="focus:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1"
                 >
                   <Star
                     className={`h-6 w-6 ${
                       rating >= star
                         ? "text-yellow-400 fill-yellow-400"
-                        : "text-gray-300"
+                        : "text-gray-300 dark:text-gray-600"
                     }`}
                   />
                 </button>
