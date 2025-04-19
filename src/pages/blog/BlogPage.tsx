@@ -133,7 +133,7 @@ const BlogPage = () => {
                   <SelectValue placeholder="Categoría" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todas</SelectItem>
+                  <SelectItem value="todas">Todas</SelectItem>
                   <SelectItem value="consejos">Consejos</SelectItem>
                   <SelectItem value="tendencias">Tendencias</SelectItem>
                   <SelectItem value="entrevistas">Entrevistas</SelectItem>
