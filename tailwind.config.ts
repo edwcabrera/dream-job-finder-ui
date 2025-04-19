@@ -76,7 +76,19 @@ export default {
 					800: '#075985',
 					900: '#0c4a6e',
 				},
-				'job-teal': {
+				'job-purple': {
+					50: '#f5f3ff',
+					100: '#ede9fe',
+					200: '#ddd6fe',
+					300: '#c4b5fd',
+					400: '#a78bfa',
+					500: '#8b5cf6',
+					600: '#7c3aed',
+					700: '#6d28d9',
+					800: '#5b21b6',
+					900: '#4c1d95',
+				},
+				'job-green': {
 					50: '#f0fdfa',
 					100: '#ccfbf1',
 					200: '#99f6e4',
@@ -121,11 +133,22 @@ export default {
 						transform: 'translateY(0)'
 					}
 				},
+				'slide-in-bottom': {
+					'0%': {
+						transform: 'translateY(20px)',
+						opacity: '0'
+					},
+					'100%': {
+						transform: 'translateY(0)',
+						opacity: '1'
+					}
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
+				'slide-in': 'slide-in-bottom 0.4s ease-out',
 			}
 		}
 	},

@@ -15,6 +15,8 @@ interface JobCardProps {
   salary: string;
   posted: string;
   logo: string;
+  isNew?: boolean;
+  isFeatured?: boolean;
 }
 
 const JobCard = ({
@@ -27,33 +29,49 @@ const JobCard = ({
   salary,
   posted,
   logo,
+  isNew,
+  isFeatured
 }: JobCardProps) => {
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="job-card">
       <CardContent className="p-0">
         <div className="p-6">
           <div className="flex items-start">
-            <div className="bg-gray-100 h-14 w-14 rounded flex items-center justify-center mr-4 flex-shrink-0">
+            <div className="bg-secondary h-14 w-14 rounded flex items-center justify-center mr-4 flex-shrink-0">
               <img src={logo} alt={company} className="h-8 w-8" />
             </div>
             <div className="flex-grow">
-              <Link to={`/empleos/${id}`}>
-                <h3 className="font-semibold text-lg mb-1 text-gray-900 hover:text-blue-600 transition-colors">
-                  {title}
-                </h3>
-              </Link>
-              <div className="text-gray-700 font-medium mb-2">{company}</div>
+              <div className="flex justify-between">
+                <Link to={`/empleos/${id}`}>
+                  <h3 className="font-semibold text-lg mb-1 text-foreground hover:text-primary transition-colors">
+                    {title}
+                  </h3>
+                </Link>
+                <div className="flex gap-1">
+                  {isNew && (
+                    <Badge className="bg-job-blue-100 text-job-blue-800 dark:bg-job-blue-900/30 dark:text-job-blue-400 text-xs">
+                      Nuevo
+                    </Badge>
+                  )}
+                  {isFeatured && (
+                    <Badge className="bg-job-purple-100 text-job-purple-800 dark:bg-job-purple-900/30 dark:text-job-purple-400 text-xs">
+                      Destacado
+                    </Badge>
+                  )}
+                </div>
+              </div>
+              <div className="text-foreground/90 font-medium mb-2">{company}</div>
               
               <div className="flex flex-wrap gap-3 mb-3">
-                <div className="flex items-center text-gray-500 text-sm">
+                <div className="flex items-center text-muted-foreground text-sm">
                   <MapPin className="h-4 w-4 mr-1" />
                   {location}
                 </div>
-                <div className="flex items-center text-gray-500 text-sm">
+                <div className="flex items-center text-muted-foreground text-sm">
                   <Building className="h-4 w-4 mr-1" />
                   {category}
                 </div>
-                <div className="flex items-center text-gray-500 text-sm">
+                <div className="flex items-center text-muted-foreground text-sm">
                   <Clock className="h-4 w-4 mr-1" />
                   {posted}
                 </div>
@@ -61,17 +79,17 @@ const JobCard = ({
               
               <div className="flex items-center justify-between">
                 <div className="flex gap-2">
-                  <Badge variant="outline" className="bg-gray-100 text-gray-800">
+                  <Badge variant="outline" className="text-xs">
                     {type}
                   </Badge>
                 </div>
-                <div className="text-blue-600 font-medium">{salary}</div>
+                <div className="text-primary font-medium">{salary}</div>
               </div>
             </div>
           </div>
         </div>
-        <div className="bg-gray-50 p-4 flex justify-between items-center border-t">
-          <Button asChild variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
+        <div className="job-card-footer">
+          <Button asChild variant="default" size="sm" className="bg-job-purple-600 hover:bg-job-purple-700">
             <Link to={`/empleos/${id}`}>Ver Detalles</Link>
           </Button>
           <Button variant="ghost" size="icon">
