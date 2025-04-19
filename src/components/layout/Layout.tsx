@@ -11,7 +11,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <ThemeProvider defaultTheme="dark">
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col antialiased selection:bg-primary selection:text-primary-foreground">
         <Navbar />
         <main className="flex-grow">{children}</main>
         <Footer />

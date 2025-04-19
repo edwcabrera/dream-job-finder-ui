@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,18 +35,18 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 245 70% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
     --background: 222 47% 10%;
-    --foreground: 210 40% 98%;
+    --foreground: 213 31% 91%;
 
     --card: 222 47% 12%;
-    --card-foreground: 210 40% 98%;
+    --card-foreground: 213 31% 91%;
 
     --popover: 222 47% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover-foreground: 213 31% 91%;
 
     --primary: 245 70% 60%;
     --primary-foreground: 222.2 47.4% 11.2%;
@@ -73,76 +75,61 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
+  h1 {
+    @apply text-4xl font-bold tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold tracking-tight;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  p {
+    @apply leading-relaxed;
   }
 }
 
 @layer components {
   .search-input {
-    @apply h-12 px-4 rounded-lg border border-input bg-background text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1;
+    @apply h-12 px-4 rounded-lg border border-input bg-background text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 transition-colors;
   }
   
   .search-button {
-    @apply h-12 px-6 rounded-lg text-white bg-job-purple-600 hover:bg-job-purple-700 font-medium transition-colors;
+    @apply h-12 px-6 rounded-lg text-white bg-job-purple-600 hover:bg-job-purple-700 font-medium transition-all duration-200 shadow-sm hover:shadow-md;
   }
   
-  /* Job card styles */
   .job-card {
-    @apply bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow;
+    @apply bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-all duration-200;
   }
   
   .job-card-header {
-    @apply p-5 border-b border-border;
+    @apply p-6 border-b border-border;
   }
   
   .job-card-body {
-    @apply p-5;
+    @apply p-6;
   }
   
   .job-card-footer {
     @apply p-4 bg-muted/40 border-t border-border flex justify-between items-center;
   }
   
-  /* Badge variants */
   .badge-outline {
-    @apply bg-transparent border border-current text-foreground/70;
+    @apply bg-transparent border border-current text-foreground/70 transition-colors hover:bg-accent/50;
   }
   
   .badge-secondary {
-    @apply bg-secondary text-secondary-foreground;
+    @apply bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/80;
   }
   
   .badge-primary {
-    @apply bg-primary/15 text-primary border-primary/30;
-  }
-  
-  /* Prose styles for article content */
-  .prose h2 {
-    @apply text-2xl font-bold mt-8 mb-4;
-  }
-  
-  .prose h3 {
-    @apply text-xl font-semibold mt-6 mb-3;
-  }
-  
-  .prose p {
-    @apply mb-4 text-foreground/80;
-  }
-  
-  .prose ul {
-    @apply list-disc pl-5 mb-4 text-foreground/80;
-  }
-  
-  .prose ol {
-    @apply list-decimal pl-5 mb-4 text-foreground/80;
-  }
-  
-  .prose a {
-    @apply text-primary hover:underline;
+    @apply bg-primary/15 text-primary border-primary/30 transition-colors hover:bg-primary/20;
   }
 }
