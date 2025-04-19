@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Buildings, MapPin, Star } from "lucide-react";
+import { ArrowUpRight, Building, MapPin, Star } from "lucide-react";
 
 // Mock job suggestions data
 const jobSuggestions = [
@@ -60,7 +60,7 @@ const JobSuggestions = () => {
                   <h3 className="font-medium hover:text-job-blue-600 transition-colors">{job.title}</h3>
                 </Link>
                 <div className="flex items-center text-gray-500 text-sm mt-1">
-                  <Buildings className="h-3.5 w-3.5 mr-1" />
+                  <Building className="h-3.5 w-3.5 mr-1" />
                   {job.company}
                 </div>
                 <div className="flex items-center text-gray-500 text-sm mt-1">
