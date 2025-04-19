@@ -1,25 +1,11 @@
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Search, FilterX } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
+import { useState } from "react";
 
 interface SearchFiltersProps {
   onFilter: (filters: any) => void;
@@ -27,196 +13,221 @@ interface SearchFiltersProps {
 
 const SearchFilters = ({ onFilter }: SearchFiltersProps) => {
   const [filters, setFilters] = useState({
-    query: "",
-    location: "",
-    jobType: "",
-    category: "",
-    salaryRange: [0, 100],
+    jobType: [],
+    category: [],
     experience: [],
+    salaryRange: [30000, 100000],
+    remoteOnly: false,
+    postedWithin: "any",
   });
 
-  const handleFilter = () => {
+  const handleCheckboxChange = (group: string, value: string) => {
+    const currentValues = filters[group as keyof typeof filters] as string[];
+    
+    let newValues;
+    if (Array.isArray(currentValues)) {
+      newValues = currentValues.includes(value)
+        ? currentValues.filter(item => item !== value)
+        : [...currentValues, value];
+    } else {
+      newValues = [value];
+    }
+    
+    setFilters({ ...filters, [group]: newValues });
+  };
+
+  const handleSliderChange = (value: number[]) => {
+    setFilters({ ...filters, salaryRange: value });
+  };
+
+  const handleSwitchChange = (name: string, checked: boolean) => {
+    setFilters({ ...filters, [name]: checked });
+  };
+
+  const handleRadioChange = (name: string, value: string) => {
+    setFilters({ ...filters, [name]: value });
+  };
+
+  const handleApplyFilters = () => {
     onFilter(filters);
   };
 
-  const resetFilters = () => {
+  const handleResetFilters = () => {
     setFilters({
-      query: "",
-      location: "",
-      jobType: "",
-      category: "",
-      salaryRange: [0, 100],
+      jobType: [],
+      category: [],
       experience: [],
+      salaryRange: [30000, 100000],
+      remoteOnly: false,
+      postedWithin: "any",
     });
     onFilter({});
   };
 
   return (
     <Card>
-      <CardContent className="p-6">
-        <div className="mb-6">
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <Input
-              type="text"
-              placeholder="Buscar empleos..."
-              value={filters.query}
-              onChange={(e) => setFilters({ ...filters, query: e.target.value })}
-              className="pl-10"
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-lg">Filtros</CardTitle>
+        <Button variant="ghost" size="icon" onClick={handleResetFilters}>
+          <X className="h-4 w-4" />
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-medium mb-3">Tipo de Empleo</h3>
+            <div className="space-y-2">
+              {jobTypes.map((type) => (
+                <div key={type.value} className="flex items-center">
+                  <Checkbox
+                    id={`job-type-${type.value}`}
+                    checked={filters.jobType.includes(type.value)}
+                    onCheckedChange={() => handleCheckboxChange('jobType', type.value)}
+                  />
+                  <Label
+                    htmlFor={`job-type-${type.value}`}
+                    className="ml-2 text-sm cursor-pointer"
+                  >
+                    {type.label}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-medium mb-3">Categoría</h3>
+            <div className="space-y-2">
+              {categories.map((category) => (
+                <div key={category.value} className="flex items-center">
+                  <Checkbox
+                    id={`category-${category.value}`}
+                    checked={filters.category.includes(category.value)}
+                    onCheckedChange={() => handleCheckboxChange('category', category.value)}
+                  />
+                  <Label
+                    htmlFor={`category-${category.value}`}
+                    className="ml-2 text-sm cursor-pointer"
+                  >
+                    {category.label}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-medium mb-3">Experiencia</h3>
+            <div className="space-y-2">
+              {experienceLevels.map((level) => (
+                <div key={level.value} className="flex items-center">
+                  <Checkbox
+                    id={`experience-${level.value}`}
+                    checked={filters.experience.includes(level.value)}
+                    onCheckedChange={() => handleCheckboxChange('experience', level.value)}
+                  />
+                  <Label
+                    htmlFor={`experience-${level.value}`}
+                    className="ml-2 text-sm cursor-pointer"
+                  >
+                    {level.label}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium">Rango Salarial</h3>
+              <span className="text-sm text-gray-500">
+                ${filters.salaryRange[0].toLocaleString()} - ${filters.salaryRange[1].toLocaleString()}
+              </span>
+            </div>
+            <Slider
+              defaultValue={filters.salaryRange}
+              min={20000}
+              max={200000}
+              step={5000}
+              onValueChange={handleSliderChange}
+              className="my-4"
             />
           </div>
 
-          <div className="mb-4">
-            <Label htmlFor="location" className="mb-1.5 block">
-              Ubicación
-            </Label>
-            <Input
-              id="location"
-              type="text"
-              placeholder="Ciudad, país..."
-              value={filters.location}
-              onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="remote-only"
+              checked={filters.remoteOnly}
+              onCheckedChange={(checked) => handleSwitchChange('remoteOnly', checked as boolean)}
             />
+            <Label htmlFor="remote-only" className="text-sm cursor-pointer">Solo trabajos remotos</Label>
           </div>
-        </div>
 
-        <Accordion type="multiple" defaultValue={["jobType", "category"]}>
-          <AccordionItem value="jobType">
-            <AccordionTrigger>Tipo de Empleo</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2 pt-1">
-                <div className="flex items-center">
+          <div>
+            <h3 className="font-medium mb-3">Publicado en</h3>
+            <div className="space-y-2">
+              {postedWithinOptions.map((option) => (
+                <div key={option.value} className="flex items-center">
                   <Checkbox
-                    id="jobType-1"
-                    checked={filters.jobType === "fullTime"}
-                    onCheckedChange={() =>
-                      setFilters({
-                        ...filters,
-                        jobType: filters.jobType === "fullTime" ? "" : "fullTime",
-                      })
-                    }
+                    id={`posted-${option.value}`}
+                    checked={filters.postedWithin === option.value}
+                    onCheckedChange={() => handleRadioChange('postedWithin', option.value)}
                   />
-                  <label
-                    htmlFor="jobType-1"
-                    className="ml-2 text-sm font-medium leading-none cursor-pointer"
+                  <Label
+                    htmlFor={`posted-${option.value}`}
+                    className="ml-2 text-sm cursor-pointer"
                   >
-                    Tiempo Completo
-                  </label>
+                    {option.label}
+                  </Label>
                 </div>
-                <div className="flex items-center">
-                  <Checkbox
-                    id="jobType-2"
-                    checked={filters.jobType === "partTime"}
-                    onCheckedChange={() =>
-                      setFilters({
-                        ...filters,
-                        jobType: filters.jobType === "partTime" ? "" : "partTime",
-                      })
-                    }
-                  />
-                  <label
-                    htmlFor="jobType-2"
-                    className="ml-2 text-sm font-medium leading-none cursor-pointer"
-                  >
-                    Medio Tiempo
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox
-                    id="jobType-3"
-                    checked={filters.jobType === "remote"}
-                    onCheckedChange={() =>
-                      setFilters({
-                        ...filters,
-                        jobType: filters.jobType === "remote" ? "" : "remote",
-                      })
-                    }
-                  />
-                  <label
-                    htmlFor="jobType-3"
-                    className="ml-2 text-sm font-medium leading-none cursor-pointer"
-                  >
-                    Remoto
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox
-                    id="jobType-4"
-                    checked={filters.jobType === "contract"}
-                    onCheckedChange={() =>
-                      setFilters({
-                        ...filters,
-                        jobType: filters.jobType === "contract" ? "" : "contract",
-                      })
-                    }
-                  />
-                  <label
-                    htmlFor="jobType-4"
-                    className="ml-2 text-sm font-medium leading-none cursor-pointer"
-                  >
-                    Por Contrato
-                  </label>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="category">
-            <AccordionTrigger>Categoría</AccordionTrigger>
-            <AccordionContent>
-              <Select
-                value={filters.category}
-                onValueChange={(value) => setFilters({ ...filters, category: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Seleccionar categoría" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="tecnologia">Tecnología</SelectItem>
-                  <SelectItem value="marketing">Marketing</SelectItem>
-                  <SelectItem value="finanzas">Finanzas</SelectItem>
-                  <SelectItem value="ventas">Ventas</SelectItem>
-                  <SelectItem value="desarrollo">Desarrollo</SelectItem>
-                  <SelectItem value="diseño">Diseño</SelectItem>
-                  <SelectItem value="rrhh">Recursos Humanos</SelectItem>
-                  <SelectItem value="administracion">Administración</SelectItem>
-                </SelectContent>
-              </Select>
-            </AccordionContent>
-          </AccordionItem>
-          
-          <AccordionItem value="salary">
-            <AccordionTrigger>Rango Salarial</AccordionTrigger>
-            <AccordionContent>
-              <div className="px-1 pt-2 pb-4">
-                <Slider
-                  defaultValue={[0, 100]}
-                  max={100}
-                  step={1}
-                  value={filters.salaryRange}
-                  onValueChange={(value) => setFilters({ ...filters, salaryRange: value })}
-                />
-                <div className="flex justify-between mt-2 text-sm text-gray-500">
-                  <span>Min: ${filters.salaryRange[0] * 1000}</span>
-                  <span>Max: ${filters.salaryRange[1] * 1000}</span>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              ))}
+            </div>
+          </div>
 
-        <div className="flex gap-2 mt-6">
-          <Button onClick={handleFilter} className="flex-1">
+          <Button 
+            onClick={handleApplyFilters} 
+            className="w-full bg-blue-600 hover:bg-blue-700"
+          >
+            <SlidersHorizontal className="h-4 w-4 mr-2" />
             Aplicar Filtros
-          </Button>
-          <Button variant="outline" onClick={resetFilters} className="flex gap-1">
-            <FilterX className="h-4 w-4" />
-            Limpiar
           </Button>
         </div>
       </CardContent>
     </Card>
   );
 };
+
+const jobTypes = [
+  { value: "full-time", label: "Tiempo Completo" },
+  { value: "part-time", label: "Medio Tiempo" },
+  { value: "contract", label: "Contrato" },
+  { value: "temporary", label: "Temporal" },
+  { value: "internship", label: "Prácticas" },
+];
+
+const categories = [
+  { value: "technology", label: "Tecnología" },
+  { value: "marketing", label: "Marketing" },
+  { value: "design", label: "Diseño" },
+  { value: "sales", label: "Ventas" },
+  { value: "finance", label: "Finanzas" },
+  { value: "customer-service", label: "Atención al Cliente" },
+];
+
+const experienceLevels = [
+  { value: "entry", label: "Nivel Inicial (0-2 años)" },
+  { value: "mid", label: "Nivel Medio (2-5 años)" },
+  { value: "senior", label: "Nivel Senior (5-8 años)" },
+  { value: "expert", label: "Nivel Experto (8+ años)" },
+];
+
+const postedWithinOptions = [
+  { value: "1d", label: "Últimas 24 horas" },
+  { value: "3d", label: "Últimos 3 días" },
+  { value: "7d", label: "Última semana" },
+  { value: "14d", label: "Últimos 14 días" },
+  { value: "30d", label: "Último mes" },
+  { value: "any", label: "Cualquier momento" },
+];
 
 export default SearchFilters;

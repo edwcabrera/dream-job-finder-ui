@@ -10,10 +10,10 @@ import SearchPage from "./pages/jobs/SearchPage";
 import JobDetailPage from "./pages/jobs/JobDetailPage";
 import BlogPage from "./pages/blog/BlogPage";
 import ArticleDetailPage from "./pages/blog/ArticleDetailPage";
-import LoginPage from "./pages/auth/LoginPage";
-import RegisterPage from "./pages/auth/RegisterPage";
+import AuthPage from "./pages/auth/AuthPage";
 import DashboardPage from "./pages/dashboard/DashboardPage";
-import AiAssistantPage from "./pages/ai/AiAssistantPage";
+import ProfilePage from "./pages/dashboard/ProfilePage";
+import AiAssistantPage from "./pages/ai-assistant/AiAssistantPage";
 import ContactPage from "./pages/contact/ContactPage";
 import NotFound from "./pages/NotFound";
 
@@ -39,16 +39,20 @@ const App = () => (
           <Route path="/blog/:id" element={<ArticleDetailPage />} />
           
           {/* Authentication */}
-          <Route path="/iniciar-sesion" element={<LoginPage />} />
-          <Route path="/registrarse" element={<RegisterPage />} />
+          <Route path="/iniciar-sesion" element={<AuthPage />} />
+          <Route path="/registrarse" element={<AuthPage />} />
+          <Route path="/recuperar-contrasena" element={<AuthPage />} />
           
           {/* Dashboard */}
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/perfil" element={<ProfilePage />} />
           <Route path="/dashboard/:section" element={<DashboardPage />} />
           
           {/* Other Pages */}
           <Route path="/asistente-ai" element={<AiAssistantPage />} />
           <Route path="/contacto" element={<ContactPage />} />
+          <Route path="/sobre-nosotros" element={<ContactPage />} />
+          <Route path="/publicar-empleo" element={<ContactPage />} />
           
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />

@@ -5,20 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Calendar, Clock, User, Share2, Bookmark } from "lucide-react";
-import BlogCard from "@/components/blog/BlogCard";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowLeft, Calendar, Clock, User, Share2, Bookmark, ThumbsUp, ThumbsDown } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
-// Mock article data
+// Mock article data for the first article
 const article = {
   id: 1,
   title: "10 consejos para mejorar tu currículum y destacar entre los candidatos",
   excerpt: "Aprende cómo estructurar tu CV de manera efectiva y hacer que los reclutadores se interesen en tu perfil desde el primer vistazo.",
-  image: "/placeholder.svg",
+  image: "/lovable-uploads/84a7ae9c-4725-48b0-807c-f94529ddf4df.png",
   category: "Consejos",
   author: {
     name: "María Gómez",
     role: "Especialista en RRHH",
     avatar: "/placeholder.svg",
+    bio: "Especialista en recursos humanos con más de 10 años de experiencia en reclutamiento y selección de personal."
   },
   date: "15 de Abril, 2025",
   readTime: "5 minutos de lectura",
@@ -68,9 +70,12 @@ const relatedArticles = [
     id: 2,
     title: "Cómo prepararte para una entrevista virtual y causar una buena impresión",
     excerpt: "Las entrevistas virtuales llegaron para quedarse. Te enseñamos cómo prepararte para brillar en tu próxima entrevista por videollamada.",
-    image: "/placeholder.svg",
+    image: "/lovable-uploads/2ddac9b2-7077-4cd8-b1fc-9d636526d7c2.png",
     category: "Entrevistas",
-    author: "Laura Mendoza",
+    author: {
+      name: "Laura Mendoza",
+      avatar: "/placeholder.svg",
+    },
     date: "5 Abr 2025",
     readTime: "6 min",
   },
@@ -78,32 +83,55 @@ const relatedArticles = [
     id: 3,
     title: "Las habilidades más demandadas en el mercado laboral tecnológico en 2025",
     excerpt: "Descubre cuáles son las competencias técnicas y blandas que las empresas de tecnología están buscando este año.",
-    image: "/placeholder.svg",
+    image: "/lovable-uploads/b22f04c1-9078-4cfa-b986-730020b9a6eb.png",
     category: "Tendencias",
-    author: "Carlos Ruiz",
+    author: {
+      name: "Carlos Ruiz",
+      avatar: "/placeholder.svg",
+    },
     date: "10 Abr 2025",
     readTime: "7 min",
-  },
-  {
-    id: 4,
-    title: "Cómo negociar un mejor salario: estrategias que funcionan",
-    excerpt: "Negociar tu salario es una habilidad crucial en tu desarrollo profesional. Te mostramos técnicas efectivas para lograrlo con éxito.",
-    image: "/placeholder.svg",
-    category: "Consejos",
-    author: "Ana Martínez",
-    date: "28 Mar 2025",
-    readTime: "5 min",
   },
 ];
 
 const ArticleDetailPage = () => {
   const { id } = useParams<{ id: string }>();
+  
   // In a real app, you would fetch the article based on the ID
   
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Enlace copiado",
+      description: "El enlace del artículo ha sido copiado al portapapeles.",
+    });
+  };
+  
+  const handleSave = () => {
+    toast({
+      title: "Artículo guardado",
+      description: "Este artículo ha sido guardado en tus favoritos.",
+    });
+  };
+  
+  const handleLike = () => {
+    toast({
+      title: "¡Gracias por tu valoración!",
+      description: "Nos alegra que hayas encontrado útil este artículo.",
+    });
+  };
+  
+  const handleDislike = () => {
+    toast({
+      title: "¡Gracias por tu valoración!",
+      description: "Trabajaremos para mejorar nuestro contenido.",
+    });
+  };
+
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+      <div className="bg-gray-50 py-8">
+        <div className="container mx-auto px-4">
           <Button variant="ghost" size="sm" asChild className="mb-6">
             <Link to="/blog" className="flex items-center">
               <ArrowLeft className="h-4 w-4 mr-1" />
@@ -111,77 +139,135 @@ const ArticleDetailPage = () => {
             </Link>
           </Button>
           
-          <Badge className="mb-4 bg-job-blue-100 hover:bg-job-blue-200 text-job-blue-700 border-none">
-            {article.category}
-          </Badge>
-          
-          <h1 className="text-3xl md:text-4xl font-bold mb-6">{article.title}</h1>
-          
-          <div className="flex items-center mb-6">
-            <Avatar className="h-10 w-10 mr-3">
-              <AvatarImage src={article.author.avatar} alt={article.author.name} />
-              <AvatarFallback>{article.author.name.slice(0, 2)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <div className="font-medium">{article.author.name}</div>
-              <div className="text-sm text-gray-500">{article.author.role}</div>
-            </div>
+          <div className="max-w-4xl mx-auto">
+            <Badge className="mb-4 bg-blue-100 hover:bg-blue-200 text-blue-700 border-none">
+              {article.category}
+            </Badge>
             
-            <div className="ml-auto flex items-center text-gray-500 text-sm">
-              <Calendar className="h-4 w-4 mr-1" />
-              <span className="mr-4">{article.date}</span>
-              <Clock className="h-4 w-4 mr-1" />
-              <span>{article.readTime}</span>
-            </div>
-          </div>
-          
-          <div className="aspect-video w-full overflow-hidden rounded-lg mb-8">
-            <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
-          </div>
-          
-          <div className="prose prose-lg max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: article.content }} />
-          </div>
-          
-          <div className="flex justify-between items-center mt-8 py-4 border-t border-b">
-            <div className="font-medium">¿Te ha resultado útil este artículo?</div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="flex gap-1">
-                <Share2 className="h-4 w-4" />
-                Compartir
-              </Button>
-              <Button variant="outline" size="sm" className="flex gap-1">
-                <Bookmark className="h-4 w-4" />
-                Guardar
-              </Button>
-            </div>
-          </div>
-          
-          <div className="mt-12">
-            <div className="flex items-center mb-8">
-              <Avatar className="h-16 w-16 mr-4">
+            <h1 className="text-3xl md:text-4xl font-bold mb-6">{article.title}</h1>
+            
+            <div className="flex items-center mb-6">
+              <Avatar className="h-10 w-10 mr-3">
                 <AvatarImage src={article.author.avatar} alt={article.author.name} />
-                <AvatarFallback>{article.author.name.slice(0, 2)}</AvatarFallback>
+                <AvatarFallback>{article.author.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
-                <div className="font-semibold text-lg">Sobre {article.author.name}</div>
-                <div className="text-gray-600">{article.author.role}</div>
-                <p className="mt-1 text-sm text-gray-500">
-                  Especialista en recursos humanos con más de 10 años de experiencia en reclutamiento y selección de personal.
-                </p>
+                <div className="font-medium">{article.author.name}</div>
+                <div className="text-sm text-gray-500">{article.author.role}</div>
+              </div>
+              
+              <div className="ml-auto flex items-center text-gray-500 text-sm">
+                <Calendar className="h-4 w-4 mr-1" />
+                <span className="mr-4">{article.date}</span>
+                <Clock className="h-4 w-4 mr-1" />
+                <span>{article.readTime}</span>
+              </div>
+            </div>
+            
+            <div className="aspect-video w-full overflow-hidden rounded-lg mb-8">
+              <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+            </div>
+            
+            <div className="bg-white rounded-lg shadow-sm p-8">
+              <div className="prose prose-lg max-w-none">
+                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+              </div>
+              
+              <div className="flex justify-between items-center mt-8 py-4 border-t border-b">
+                <div className="font-medium">¿Te ha resultado útil este artículo?</div>
+                <div className="flex gap-3">
+                  <Button variant="outline" size="sm" className="flex gap-1" onClick={handleLike}>
+                    <ThumbsUp className="h-4 w-4" />
+                    Sí
+                  </Button>
+                  <Button variant="outline" size="sm" className="flex gap-1" onClick={handleDislike}>
+                    <ThumbsDown className="h-4 w-4" />
+                    No
+                  </Button>
+                  <Button variant="outline" size="sm" className="flex gap-1" onClick={handleShare}>
+                    <Share2 className="h-4 w-4" />
+                    Compartir
+                  </Button>
+                  <Button variant="outline" size="sm" className="flex gap-1" onClick={handleSave}>
+                    <Bookmark className="h-4 w-4" />
+                    Guardar
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="mt-8">
+                <div className="flex items-center p-6 bg-gray-50 rounded-lg">
+                  <Avatar className="h-16 w-16 mr-4">
+                    <AvatarImage src={article.author.avatar} alt={article.author.name} />
+                    <AvatarFallback>{article.author.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className="font-semibold text-lg">Sobre {article.author.name}</div>
+                    <div className="text-gray-600">{article.author.role}</div>
+                    <p className="mt-1 text-sm text-gray-500">
+                      {article.author.bio}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <Separator className="my-12" />
-        
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold mb-8">Artículos Relacionados</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {relatedArticles.map((article) => (
-              <BlogCard key={article.id} {...article} />
-            ))}
+          
+          <div className="max-w-6xl mx-auto mt-16">
+            <h2 className="text-2xl font-bold mb-8">Artículos Relacionados</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {relatedArticles.map((article) => (
+                <Card key={article.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <Link to={`/blog/${article.id}`} className="block">
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={article.image}
+                        alt={article.title}
+                        className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
+                      />
+                    </div>
+                  </Link>
+                  <CardContent className="p-6">
+                    <Badge className="mb-2 bg-blue-100 hover:bg-blue-200 text-blue-700 border-none">
+                      {article.category}
+                    </Badge>
+                    <Link to={`/blog/${article.id}`}>
+                      <h3 className="font-bold text-lg mb-2 hover:text-blue-600 transition-colors">
+                        {article.title}
+                      </h3>
+                    </Link>
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      {article.excerpt}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Avatar className="h-8 w-8 mr-2">
+                          <AvatarImage src={article.author.avatar} alt={article.author.name} />
+                          <AvatarFallback>{article.author.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm font-medium">{article.author.name}</span>
+                      </div>
+                      <div className="flex items-center space-x-3 text-sm text-gray-500">
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1" />
+                          {article.date}
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1" />
+                          {article.readTime}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <div className="mt-8 text-center">
+              <Button asChild variant="outline">
+                <Link to="/blog">Ver más artículos</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

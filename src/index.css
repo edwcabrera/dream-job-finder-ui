@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -14,16 +14,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 196 100% 47%;
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 172 66% 40%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 196 100% 47%;
+    --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -31,7 +31,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 196 100% 47%;
+    --ring: 221.2 83.2% 53.3%;
 
     --radius: 0.5rem;
   }
@@ -46,16 +46,16 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 196 100% 47%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 172 66% 40%;
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 196 100% 47%;
+    --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -63,7 +63,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 196 100% 47%;
+    --ring: 224.3 76.3% 48%;
   }
 }
 
@@ -84,10 +84,35 @@
 
 @layer components {
   .search-input {
-    @apply h-12 px-4 rounded-lg border border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply h-12 px-4 rounded-lg border border-input bg-background text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1;
   }
   
   .search-button {
-    @apply h-12 px-6 rounded-lg text-white bg-job-blue-600 hover:bg-job-blue-700 font-medium transition-colors;
+    @apply h-12 px-6 rounded-lg text-white bg-blue-600 hover:bg-blue-700 font-medium transition-colors;
+  }
+  
+  /* Prose styles for article content */
+  .prose h2 {
+    @apply text-2xl font-bold mt-8 mb-4;
+  }
+  
+  .prose h3 {
+    @apply text-xl font-semibold mt-6 mb-3;
+  }
+  
+  .prose p {
+    @apply mb-4 text-gray-700;
+  }
+  
+  .prose ul {
+    @apply list-disc pl-5 mb-4 text-gray-700;
+  }
+  
+  .prose ol {
+    @apply list-decimal pl-5 mb-4 text-gray-700;
+  }
+  
+  .prose a {
+    @apply text-blue-600 hover:underline;
   }
 }

@@ -1,12 +1,13 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import JobCard from "@/components/jobs/JobCard";
 import SearchFilters from "@/components/jobs/SearchFilters";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle } from "lucide-react";
+import { Grid2X2, List, Search, MapPin, SlidersHorizontal } from "lucide-react";
 
 // Mock job data
 const jobsData = [
@@ -101,39 +102,100 @@ const jobsData = [
 ];
 
 const SearchPage = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [jobTitle, setJobTitle] = useState("");
+  const [location, setLocation] = useState("");
   const [filters, setFilters] = useState({});
   const [view, setView] = useState<"grid" | "list">("list");
+  const [showFilters, setShowFilters] = useState(false);
   
   // Extract search params
-  const initialQuery = searchParams.get("titulo") || "";
-  const initialLocation = searchParams.get("ubicacion") || "";
+  useEffect(() => {
+    const initialTitle = searchParams.get("titulo") || "";
+    const initialLocation = searchParams.get("ubicacion") || "";
+    setJobTitle(initialTitle);
+    setLocation(initialLocation);
+  }, [searchParams]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newParams = new URLSearchParams();
+    if (jobTitle) newParams.set("titulo", jobTitle);
+    if (location) newParams.set("ubicacion", location);
+    setSearchParams(newParams);
+  };
 
   // Apply filters (in a real app, this would query an API with the filters)
   const filteredJobs = jobsData;
 
   return (
     <Layout>
+      <div className="bg-slate-900 text-white py-10">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-bold mb-6">Encuentra Tu Próximo Empleo</h1>
+          
+          <form onSubmit={handleSearch} className="bg-white/10 backdrop-blur-md rounded-lg shadow-lg p-2 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
+              <div className="md:col-span-5 relative">
+                <Search className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="¿Qué trabajo estás buscando?"
+                  value={jobTitle}
+                  onChange={(e) => setJobTitle(e.target.value)}
+                  className="search-input pl-10 w-full bg-white/10 text-white border-slate-700 focus:border-blue-500"
+                />
+              </div>
+              <div className="md:col-span-5 relative">
+                <MapPin className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Ubicación (ciudad, país)"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="search-input pl-10 w-full bg-white/10 text-white border-slate-700 focus:border-blue-500"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <Button type="submit" className="search-button w-full bg-blue-600 hover:bg-blue-700">
+                  Buscar
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      
       <div className="bg-gray-50 py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-2">Resultados de búsqueda</h1>
-          {(initialQuery || initialLocation) && (
+          {(jobTitle || location) && (
             <p className="text-gray-600 mb-6">
-              {initialQuery && `Búsqueda: "${initialQuery}"`}
-              {initialQuery && initialLocation && " - "}
-              {initialLocation && `Ubicación: "${initialLocation}"`}
+              {jobTitle && `Búsqueda: "${jobTitle}"`}
+              {jobTitle && location && " - "}
+              {location && `Ubicación: "${location}"`}
             </p>
           )}
 
+          <div className="md:hidden mb-4">
+            <Button 
+              variant="outline" 
+              className="w-full flex items-center justify-center"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <SlidersHorizontal className="mr-2 h-4 w-4" />
+              {showFilters ? "Ocultar Filtros" : "Mostrar Filtros"}
+            </Button>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="md:col-span-1">
+            <div className={`md:col-span-1 ${showFilters ? 'block' : 'hidden md:block'}`}>
               <div className="sticky top-4">
                 <SearchFilters onFilter={setFilters} />
               </div>
             </div>
             
             <div className="md:col-span-3">
-              <div className="bg-white rounded-lg shadow p-4 mb-6">
+              <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
                     <p className="text-gray-600">
@@ -145,33 +207,25 @@ const SearchPage = () => {
                     <span className="text-sm text-gray-500 mr-2">Vista:</span>
                     <Tabs value={view} onValueChange={(value) => setView(value as "grid" | "list")}>
                       <TabsList>
-                        <TabsTrigger value="list">Lista</TabsTrigger>
-                        <TabsTrigger value="grid">Cuadrícula</TabsTrigger>
+                        <TabsTrigger value="list" className="flex items-center">
+                          <List className="h-4 w-4 mr-1" />
+                          Lista
+                        </TabsTrigger>
+                        <TabsTrigger value="grid" className="flex items-center">
+                          <Grid2X2 className="h-4 w-4 mr-1" />
+                          Cuadrícula
+                        </TabsTrigger>
                       </TabsList>
                     </Tabs>
                   </div>
                 </div>
               </div>
               
-              {filteredJobs.length > 0 ? (
-                <div className={view === "grid" ? "grid grid-cols-1 md:grid-cols-2 gap-4" : "space-y-4"}>
-                  {filteredJobs.map((job) => (
-                    <JobCard key={job.id} {...job} />
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-white rounded-lg shadow p-8 text-center">
-                  <div className="flex items-center justify-center mb-4 text-yellow-500">
-                    <AlertCircle className="h-12 w-12" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">No se encontraron resultados</h3>
-                  <p className="text-gray-600 mb-6">
-                    No hemos encontrado ofertas que coincidan con tus criterios de búsqueda.
-                    Intenta con otros términos o amplía tu búsqueda.
-                  </p>
-                  <Button variant="outline">Limpiar filtros</Button>
-                </div>
-              )}
+              <div className={view === "grid" ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "space-y-6"}>
+                {filteredJobs.map((job) => (
+                  <JobCard key={job.id} {...job} />
+                ))}
+              </div>
               
               {filteredJobs.length > 0 && (
                 <div className="mt-8 flex justify-center">
@@ -179,7 +233,7 @@ const SearchPage = () => {
                     <Button variant="outline" size="sm" disabled>
                       Anterior
                     </Button>
-                    <Button variant="outline" size="sm" className="bg-job-blue-50 text-job-blue-600">
+                    <Button variant="outline" size="sm" className="bg-blue-50 text-blue-600">
                       1
                     </Button>
                     <Button variant="outline" size="sm">

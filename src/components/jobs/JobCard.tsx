@@ -38,7 +38,7 @@ const JobCard = ({
             </div>
             <div className="flex-grow">
               <Link to={`/empleos/${id}`}>
-                <h3 className="font-semibold text-lg mb-1 text-gray-900 hover:text-job-blue-600 transition-colors">
+                <h3 className="font-semibold text-lg mb-1 text-gray-900 hover:text-blue-600 transition-colors">
                   {title}
                 </h3>
               </Link>
@@ -65,13 +65,13 @@ const JobCard = ({
                     {type}
                   </Badge>
                 </div>
-                <div className="text-job-blue-600 font-medium">{salary}</div>
+                <div className="text-blue-600 font-medium">{salary}</div>
               </div>
             </div>
           </div>
         </div>
         <div className="bg-gray-50 p-4 flex justify-between items-center border-t">
-          <Button asChild variant="default" size="sm">
+          <Button asChild variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700">
             <Link to={`/empleos/${id}`}>Ver Detalles</Link>
           </Button>
           <Button variant="ghost" size="icon">

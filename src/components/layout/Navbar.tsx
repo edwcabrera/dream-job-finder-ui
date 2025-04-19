@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, Bell, User } from "lucide-react";
+import { Menu, X, Search, Bell, Moon, Sun } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,68 +12,69 @@ import {
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   return (
-    <nav className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-3">
+    <nav className="bg-slate-900 text-white py-4">
+      <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="font-bold text-2xl text-job-blue-600">Empleo<span className="text-job-teal-600">Latino</span></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-job-blue-500 mr-2">
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M7 10h2v7H7z" />
+              <path d="M14 10h2v7h-2z" />
+              <path d="M10 15h3v2h-3z" />
+              <path d="M10 10h3v2h-3z" />
+            </svg>
+            <span className="font-bold text-2xl text-purple-400">Dream<span className="text-blue-400">Job</span></span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/empleos" className="text-gray-700 hover:text-job-blue-600 font-medium">
-              Empleos
+            <Link to="/" className="text-white hover:text-blue-400 font-medium">
+              Inicio
             </Link>
-            <Link to="/empresas" className="text-gray-700 hover:text-job-blue-600 font-medium">
-              Empresas
+            <Link to="/empleos" className="text-white hover:text-blue-400 font-medium">
+              Explorar Empleos
             </Link>
-            <Link to="/blog" className="text-gray-700 hover:text-job-blue-600 font-medium">
+            <Link to="/blog" className="text-white hover:text-blue-400 font-medium">
               Blog
             </Link>
-            <Link to="/asistente-ai" className="text-gray-700 hover:text-job-blue-600 font-medium">
-              Asistente AI
+            <Link to="/sobre-nosotros" className="text-white hover:text-blue-400 font-medium">
+              Acerca de
             </Link>
           </div>
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/buscar">
-                <Search className="h-5 w-5" />
-              </Link>
+            <button onClick={toggleDarkMode} className="p-2 rounded-full text-white">
+              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
+            
+            <Button asChild variant="outline" className="font-medium bg-opacity-20 text-white border-blue-400 hover:bg-blue-800">
+              <Link to="/publicar-empleo">Publicar un Empleo</Link>
             </Button>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Bell className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>No tienes notificaciones</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <div className="border-l h-6 border-gray-200 mx-2"></div>
-            
-            <Button asChild variant="outline" className="font-medium">
+            <Button asChild className="bg-blue-600 hover:bg-blue-700 font-medium">
               <Link to="/iniciar-sesion">Iniciar sesión</Link>
-            </Button>
-            
-            <Button asChild className="bg-job-blue-600 hover:bg-job-blue-700 font-medium">
-              <Link to="/registrarse">Registrarse</Link>
             </Button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
+            <button onClick={toggleDarkMode} className="p-2 mr-2 rounded-full text-white">
+              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-white"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -83,50 +84,50 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden px-4 pb-4 bg-white">
-          <div className="flex flex-col space-y-3">
+        <div className="md:hidden px-4 pb-4 bg-slate-900 text-white">
+          <div className="flex flex-col space-y-3 pt-3">
             <Link
-              to="/empleos"
-              className="py-2 text-gray-700 hover:text-job-blue-600 font-medium"
+              to="/"
+              className="py-2 text-white hover:text-blue-400 font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Empleos
+              Inicio
             </Link>
             <Link
-              to="/empresas"
-              className="py-2 text-gray-700 hover:text-job-blue-600 font-medium"
+              to="/empleos"
+              className="py-2 text-white hover:text-blue-400 font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Empresas
+              Explorar Empleos
             </Link>
             <Link
               to="/blog"
-              className="py-2 text-gray-700 hover:text-job-blue-600 font-medium"
+              className="py-2 text-white hover:text-blue-400 font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
               Blog
             </Link>
             <Link
-              to="/asistente-ai"
-              className="py-2 text-gray-700 hover:text-job-blue-600 font-medium"
+              to="/sobre-nosotros"
+              className="py-2 text-white hover:text-blue-400 font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Asistente AI
+              Acerca de
             </Link>
-            <div className="border-t border-gray-200 my-2"></div>
+            <div className="border-t border-gray-700 my-2"></div>
+            <Link
+              to="/publicar-empleo"
+              className="py-2 text-white hover:text-blue-400 font-medium"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Publicar un Empleo
+            </Link>
             <Link
               to="/iniciar-sesion"
-              className="py-2 text-gray-700 hover:text-job-blue-600 font-medium"
+              className="py-2 text-blue-400 font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
               Iniciar sesión
-            </Link>
-            <Link
-              to="/registrarse"
-              className="py-2 text-job-blue-600 font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Registrarse
             </Link>
           </div>
         </div>

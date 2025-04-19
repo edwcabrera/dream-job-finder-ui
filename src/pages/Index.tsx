@@ -1,17 +1,23 @@
 
 import Layout from "@/components/layout/Layout";
 import HeroSection from "@/components/home/HeroSection";
-import RecentJobs from "@/components/home/RecentJobs";
-import Testimonials from "@/components/home/Testimonials";
-import Benefits from "@/components/home/Benefits";
+import JobCategories from "@/components/home/JobCategories";
+import FeaturedJobs from "@/components/home/FeaturedJobs";
+import PlatformBenefits from "@/components/home/PlatformBenefits";
+import JobSubscription from "@/components/home/JobSubscription";
+import BlogPreview from "@/components/home/BlogPreview";
+import CallToAction from "@/components/home/CallToAction";
 
 const Index = () => {
   return (
     <Layout>
       <HeroSection />
-      <RecentJobs />
-      <Testimonials />
-      <Benefits />
+      <JobCategories />
+      <FeaturedJobs />
+      <PlatformBenefits />
+      <JobSubscription />
+      <BlogPreview />
+      <CallToAction />
     </Layout>
   );
 };

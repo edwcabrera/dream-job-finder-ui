@@ -1,29 +1,11 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  ArrowLeft,
-  MapPin,
-  Building,
-  Clock,
-  Calendar,
-  Briefcase,
-  Globe,
-  BookmarkPlus,
-  Share2,
-  Star,
-  StarHalf,
-  Mail,
-  Send,
-  FileText,
-} from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "@/components/ui/use-toast";
+import { MapPin, Calendar, Building, Star, Briefcase, Share2, BookmarkPlus } from "lucide-react";
 
 interface JobDetailProps {
   job: {
@@ -34,264 +16,174 @@ interface JobDetailProps {
     type: string;
     category: string;
     salary: string;
-    posted: string;
+    postedDate: string;
     logo: string;
+    summary: string;
     description: string;
+    responsibilities: string[];
     requirements: string[];
     benefits: string[];
-    companyInfo: string;
+    aboutCompany: string;
+    companyType: string;
   };
 }
 
 const JobDetail = ({ job }: JobDetailProps) => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-
-  const handleApply = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [rating, setRating] = useState(0);
+  
+  const handleRate = (value: number) => {
+    setRating(value);
     toast({
-      title: "Solicitud enviada",
-      description: "Tu solicitud ha sido enviada correctamente.",
-    });
-    setEmail("");
-    setMessage("");
-    setFile(null);
-  };
-
-  const handleRating = (rating: number) => {
-    toast({
-      title: "¡Gracias por calificar!",
-      description: `Has calificado esta oferta con ${rating} estrellas.`,
+      title: "¡Gracias por tu valoración!",
+      description: `Has valorado esta oferta con ${value} estrellas.`,
     });
   };
-
+  
+  const handleSave = () => {
+    toast({
+      title: "Empleo guardado",
+      description: "Este empleo ha sido guardado en tu lista.",
+    });
+  };
+  
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Enlace copiado",
+      description: "El enlace ha sido copiado al portapapeles.",
+    });
+  };
+  
   return (
-    <div>
-      <div className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center mb-4"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Volver
-          </Button>
-
-          <div className="flex flex-col md:flex-row md:items-start gap-4">
-            <div className="bg-gray-100 h-20 w-20 rounded flex items-center justify-center mr-4 flex-shrink-0">
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="flex flex-col md:flex-row md:items-center mb-6">
+          <div className="mr-6 mb-4 md:mb-0">
+            <div className="bg-gray-100 h-20 w-20 rounded-md flex items-center justify-center">
               <img src={job.logo} alt={job.company} className="h-12 w-12" />
             </div>
-            <div className="flex-grow">
-              <h1 className="text-2xl md:text-3xl font-bold mb-1">{job.title}</h1>
-              <div className="text-lg text-gray-700 font-medium mb-2">{job.company}</div>
-              
-              <div className="flex flex-wrap gap-4 mb-4">
-                <div className="flex items-center text-gray-600">
-                  <MapPin className="h-5 w-5 mr-1" />
-                  {job.location}
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Building className="h-5 w-5 mr-1" />
-                  {job.category}
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Briefcase className="h-5 w-5 mr-1" />
-                  {job.type}
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Calendar className="h-5 w-5 mr-1" />
-                  {job.posted}
-                </div>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold mb-2">{job.title}</h1>
+            <div className="text-lg text-gray-700 font-medium mb-2">{job.company}</div>
+            <div className="flex flex-wrap gap-3">
+              <div className="flex items-center text-gray-500 text-sm">
+                <MapPin className="h-4 w-4 mr-1" />
+                {job.location}
               </div>
-              
-              <div className="flex flex-wrap items-center gap-3">
-                <Badge variant="outline" className="text-job-blue-600 border-job-blue-200 bg-job-blue-50 px-3 py-1">
-                  {job.salary}
-                </Badge>
-                
-                <div className="flex items-center">
-                  <Button variant="outline" size="sm" className="flex gap-1">
-                    <BookmarkPlus className="h-4 w-4" />
-                    Guardar
-                  </Button>
-                </div>
-                
-                <div className="flex items-center">
-                  <Button variant="outline" size="sm" className="flex gap-1">
-                    <Share2 className="h-4 w-4" />
-                    Compartir
-                  </Button>
-                </div>
+              <div className="flex items-center text-gray-500 text-sm">
+                <Briefcase className="h-4 w-4 mr-1" />
+                {job.type}
+              </div>
+              <div className="flex items-center text-gray-500 text-sm">
+                <Building className="h-4 w-4 mr-1" />
+                {job.category}
+              </div>
+              <div className="flex items-center text-gray-500 text-sm">
+                <Calendar className="h-4 w-4 mr-1" />
+                {job.postedDate}
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-2">
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <Tabs defaultValue="details">
-                <TabsList className="mb-4">
-                  <TabsTrigger value="details">Detalles</TabsTrigger>
-                  <TabsTrigger value="company">Empresa</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="details">
-                  <div className="space-y-6">
-                    <div>
-                      <h2 className="text-xl font-semibold mb-3">Descripción del Puesto</h2>
-                      <div className="text-gray-700 space-y-3">
-                        <p>{job.description}</p>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h2 className="text-xl font-semibold mb-3">Requisitos</h2>
-                      <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                        {job.requirements.map((req, index) => (
-                          <li key={index}>{req}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h2 className="text-xl font-semibold mb-3">Beneficios</h2>
-                      <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                        {job.benefits.map((benefit, index) => (
-                          <li key={index}>{benefit}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="company">
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-semibold mb-3">Sobre {job.company}</h2>
-                    <div className="text-gray-700">
-                      <p>{job.companyInfo}</p>
-                    </div>
-                    
-                    <div className="mt-4">
-                      <Button asChild variant="outline">
-                        <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                          <Globe className="h-4 w-4" />
-                          Visitar Sitio Web
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
+        
+        <div className="bg-blue-50 p-4 rounded-lg mb-6">
+          <div className="font-semibold text-xl mb-1">Rango Salarial</div>
+          <div className="text-blue-700 font-bold text-2xl">{job.salary}</div>
+        </div>
+        
+        <section className="mb-8">
+          <h2 className="text-xl font-bold mb-4">Resumen del Empleo</h2>
+          <p className="text-gray-700">{job.summary}</p>
+        </section>
+        
+        <Separator className="my-6" />
+        
+        <section className="mb-8">
+          <h2 className="text-xl font-bold mb-4">Descripción del Empleo</h2>
+          <p className="text-gray-700 mb-6">{job.description}</p>
+          
+          <h3 className="text-lg font-bold mb-3">Responsabilidades</h3>
+          <ul className="list-disc pl-5 mb-6 text-gray-700 space-y-1">
+            {job.responsibilities.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+          
+          <h3 className="text-lg font-bold mb-3">Requisitos</h3>
+          <ul className="list-disc pl-5 mb-6 text-gray-700 space-y-1">
+            {job.requirements.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+          
+          <h3 className="text-lg font-bold mb-3">Beneficios</h3>
+          <ul className="list-disc pl-5 text-gray-700 space-y-1">
+            {job.benefits.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </section>
+        
+        <Separator className="my-6" />
+        
+        <section className="mb-8">
+          <h2 className="text-xl font-bold mb-4">Acerca de {job.company}</h2>
+          <div className="flex items-start mb-4">
+            <div className="bg-gray-100 h-14 w-14 rounded-md flex items-center justify-center mr-4">
+              <img src={job.logo} alt={job.company} className="h-8 w-8" />
             </div>
-            
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">¿Qué te pareció esta oferta?</h2>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => handleRating(1)}>
-                  <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => handleRating(2)}>
-                  <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => handleRating(3)}>
-                  <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => handleRating(4)}>
-                  <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => handleRating(5)}>
-                  <Star className="h-5 w-5 text-yellow-400" />
-                </Button>
-              </div>
+            <div>
+              <h3 className="font-semibold text-lg">{job.company}</h3>
+              <p className="text-gray-600 text-sm">{job.companyType}</p>
+            </div>
+          </div>
+          <p className="text-gray-700 mb-4">{job.aboutCompany}</p>
+          <Button asChild variant="outline" size="sm">
+            <Link to="#" className="flex items-center">
+              Ver Perfil de Empresa
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </Link>
+          </Button>
+        </section>
+        
+        <Separator className="my-6" />
+        
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+          <div className="flex items-center">
+            <span className="mr-3">Valorar este empleo:</span>
+            <div className="flex">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => handleRate(star)}
+                  className="focus:outline-none"
+                >
+                  <Star
+                    className={`h-6 w-6 ${
+                      rating >= star
+                        ? "text-yellow-400 fill-yellow-400"
+                        : "text-gray-300"
+                    }`}
+                  />
+                </button>
+              ))}
             </div>
           </div>
           
-          <div className="md:col-span-1">
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Aplicar a este empleo</h2>
-                <form onSubmit={handleApply}>
-                  <div className="space-y-4">
-                    <div>
-                      <label htmlFor="email" className="block mb-2 text-sm font-medium">
-                        Tu correo electrónico
-                      </label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="tu@correo.com"
-                        required
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="message" className="block mb-2 text-sm font-medium">
-                        Mensaje (opcional)
-                      </label>
-                      <Textarea
-                        id="message"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Cuéntanos por qué eres ideal para este puesto..."
-                        rows={4}
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block mb-2 text-sm font-medium">
-                        Adjuntar CV
-                      </label>
-                      <div className="border border-dashed border-gray-300 rounded-lg px-3 py-4">
-                        <label className="flex flex-col items-center justify-center cursor-pointer">
-                          <FileText className="h-8 w-8 text-gray-400 mb-2" />
-                          <span className="text-sm text-gray-500">
-                            {file ? file.name : "Subir tu CV (PDF, DOC)"}
-                          </span>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            className="hidden"
-                            onChange={(e) => setFile(e.target.files?.[0] || null)}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6">
-                    <Button type="submit" className="w-full">
-                      <Send className="h-4 w-4 mr-2" />
-                      Enviar Solicitud
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-            
-            <Card className="mt-6">
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold mb-3">¿Preguntas o dudas?</h2>
-                <p className="text-gray-600 text-sm mb-4">
-                  Contáctanos si necesitas más información sobre este empleo.
-                </p>
-                <Button asChild variant="outline" className="w-full">
-                  <Link to="/contacto" className="flex items-center justify-center gap-2">
-                    <Mail className="h-4 w-4" />
-                    Contactar
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={handleShare} className="flex items-center">
+              <Share2 className="h-4 w-4 mr-1" />
+              Compartir
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleSave} className="flex items-center">
+              <BookmarkPlus className="h-4 w-4 mr-1" />
+              Guardar
+            </Button>
           </div>
         </div>
       </div>
